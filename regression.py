@@ -39,7 +39,30 @@ import statsmodels.api as sm
     #request=res.text
     #data=json.loads(request)
     ###################################################
-
+data = {
+    "set0": [
+        {
+            "age": 48, 
+            "user_id": 1, 
+            "last_name": "JACKSON", 
+            "service_id": 3, 
+            "orders_last_month": 71, 
+            "orders_this_month": 32
+        }
+        
+    ],
+    "set1": [
+        {
+            "age": 63, 
+            "user_id": 1, 
+            "last_name": "WILLIAMS", 
+            "service_id": 1, 
+            "orders_last_month": 85, 
+            "orders_this_month": 128
+        }
+                     
+    ]
+}
 
 bjson= pd.read_json("C:/Desktop/b_data.json")
 l = []
@@ -142,3 +165,69 @@ plt.ylabel("Predictions")
 
 print("Score:",model.score(X_test, y_test))
 
+#########################################################PRACTISE###############################################################################################################
+
+abc=[]
+sam =data['fields']
+for i in sam:
+    
+    das=(i,":",sam[i])
+    abc.append(das)
+    #print(abc)
+    df = pd.DataFrame(abc)
+    #print(df)
+ ################################################################################################   
+sam_21400_self=data["fields"]["customnumber_21400"]['self']
+sam__21400_id=data["fields"]["customnumber_21400"]['id']
+info= dict(customnumber_21400_self=sam_21400_self,
+           customnumber_21400_id=sam__21400_id,
+           resolution=sam['resolution'],
+          custom_12801=sam['custom_12801'])
+for j,k in info.items():
+    #print(j,":"k)
+    abc=(j,":",k)
+    print(abc)   
+ 
+################################################################################################
+    
+def flatten_dict(d):
+    """ Returns list of lists from given dictionary """
+    l = []
+    for k, v in sorted(d.items()):
+        if isinstance(v, dict):
+            flatten_v = flatten_dict(v)
+            for my_l in reversed(flatten_v):
+                my_l.insert(0, k)
+
+            l.extend(flatten_v)
+
+        elif isinstance(v, list):
+            for l_val in v:
+                l.append([k, l_val])
+
+        else:
+            l.append([k, v])
+
+    return l
+#############################################################################################################################
+d = {"response": {"body": {"contact": {"email": "mr@abc.com", "mobile_number": "0123456789"}, 
+                           "personal": {"last_name": "Muster", "gender": "m", "first_name": "Max", "dob": "1985-12-23", "family_status": "single", "title": "Dr."}, 
+                           "customer": {"verified": "true", "customer_id": "1234567"}}, "token": "dsfgf", "version": "1.1"}}
+
+df = pd.json_normalize(d)
+#df.columns = df.columns.map(lambda x: x.split(".")[-1])
+df
+###################################################################################################################################
+data = '{"name": "John Smith", "hometown": {"name": "New York", "id": 123}}'
+
+# Parse JSON into an object with attributes corresponding to dict keys.
+x = json.loads(data, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+#print(x.name, x.hometown.name, x.hometown.id)
+
+
+
+def _json_object_hook(d): return namedtuple('X', d.keys())(*d.values())
+def json2obj(data): return json.loads(data, object_hook=_json_object_hook)
+
+x = json2obj(data)
+print(x)
